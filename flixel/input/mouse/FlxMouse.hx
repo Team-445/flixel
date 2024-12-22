@@ -74,17 +74,17 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	 * Check to see if mouse has just been moved upwards.
 	 */
 	public var justMovedUp(get, never):Bool;
-	
+
 	/**
 	 * Check to see if mouse has just been moved downwards.
 	 */
 	public var justMovedDown(get, never):Bool;
-	
+
 	/**
 	 * Check to see if mouse has just been moved leftwards.
 	 */
 	public var justMovedLeft(get, never):Bool;
-	
+
 	/**
 	 * Check to see if mouse has just been moved rightwards.
 	 */
@@ -286,9 +286,9 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	 * Helper variables for movement checks
 	 */
 	var _startX:Float = 0;
-	
+
 	var _startY:Float = 0;
-	
+
 	var _swipeDeltaX(get, never):Float;
 	var _swipeDeltaY(get, never):Float;
 
@@ -515,7 +515,7 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 
 		velocity = FlxDestroyUtil.put(velocity);
 		swipeThreshold = FlxDestroyUtil.put(swipeThreshold);
-		
+
 		#if FLX_POINTER_INPUT
 		flickManager.destroy();
 		#end
@@ -613,13 +613,13 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 			_startX = viewX;
 			_startY = viewY;
 		}
-		
+
 		#if FLX_POINTER_INPUT
 		if (justReleased)
 		{
 			flickManager.initFlick(velocity);
 		}
-		
+
 		if (pressed)
 		{
 			flickManager.destroy();
@@ -709,21 +709,21 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 	@:noCompletion
 	function get_justMovedUp():Bool
 	{
-		var swiped:Bool = _swipeDeltaY > swipeThreshold.y;
-		if (swiped)
-			_startY = viewY;
-		return swiped;
-	}
-	
-	@:noCompletion
-	function get_justMovedDown():Bool
-	{
 		var swiped:Bool = _swipeDeltaY < -swipeThreshold.y;
 		if (swiped)
 			_startY = viewY;
 		return swiped;
 	}
-	
+
+	@:noCompletion
+	function get_justMovedDown():Bool
+	{
+		var swiped:Bool = _swipeDeltaY > swipeThreshold.y;
+		if (swiped)
+			_startY = viewY;
+		return swiped;
+	}
+
 	@:noCompletion
 	function get_justMovedLeft():Bool
 	{
@@ -732,7 +732,7 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 			_startX = viewX;
 		return swiped;
 	}
-	
+
 	@:noCompletion
 	function get_justMovedRight():Bool
 	{
@@ -741,15 +741,15 @@ class FlxMouse extends FlxPointer implements IFlxInputManager
 			_startX = viewX;
 		return swiped;
 	}
-	
+
 	@:noCompletion
 	inline function get__swipeDeltaX():Float
 		return viewX - _startX;
-		
+
 	@:noCompletion
 	inline function get__swipeDeltaY():Float
 		return viewY - _startY;
-		
+
 	@:noCompletion
 	inline function get_deltaX():Int
 		return x - _prevX;
