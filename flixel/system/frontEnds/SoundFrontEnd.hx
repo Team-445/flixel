@@ -11,11 +11,7 @@ import flixel.system.FlxAssets;
 import flixel.system.ui.FlxSoundTray;
 import flixel.text.FlxInputText;
 import flixel.util.FlxSignal;
-import openfl.Assets;
 import openfl.media.Sound;
-#if (openfl >= "8.0.0")
-import openfl.utils.AssetType;
-#end
 
 /**
  * Accessed via `FlxG.sound`.
@@ -70,14 +66,14 @@ class SoundFrontEnd
 	 * volumeUp-, volumeDown- or muteKeys is pressed.
 	 */
 	public var soundTrayEnabled:Bool = true;
-
+	
 	#if FLX_SOUND_TRAY
 	/**
 	 * The sound tray display container.
 	 * A getter for `FlxG.game.soundTray`.
 	 */
 	public var soundTray(get, never):FlxSoundTray;
-
+	
 	inline function get_soundTray()
 	{
 		return FlxG.game.soundTray;
@@ -107,6 +103,8 @@ class SoundFrontEnd
 	/**
 	 * Set up and play a looping background soundtrack.
 	 *
+	 * **Note:** If the `FLX_DEFAULT_SOUND_EXT` flag is enabled, you may omit the file extension
+	 *
 	 * @param   embeddedMusic  The sound file you want to loop in the background.
 	 * @param   volume         How loud the sound should be, from 0 to 1.
 	 * @param   looped         Whether to loop this music.
@@ -116,7 +114,7 @@ class SoundFrontEnd
 	{
 		if (group == null)
 			group = defaultMusicGroup;
-
+		
 		if (music == null)
 		{
 			music = new FlxSound();
@@ -125,7 +123,7 @@ class SoundFrontEnd
 		{
 			music.stop();
 		}
-
+		
 		music.loadEmbedded(embeddedMusic, looped);
 		music.volume = volume;
 		music.persist = true;
@@ -135,6 +133,8 @@ class SoundFrontEnd
 
 	/**
 	 * Creates a new FlxSound object.
+	 *
+	 * **Note:** If the `FLX_DEFAULT_SOUND_EXT` flag is enabled, you may omit the file extension
 	 *
 	 * @param   embeddedSound   The embedded sound resource you want to play.  To stream, use the optional URL parameter instead.
 	 * @param   volume          How loud to play it (0 to 1).
@@ -193,13 +193,13 @@ class SoundFrontEnd
 	{
 		if (group == null)
 			group = defaultSoundGroup;
-
+		
 		sound.volume = volume;
 		group.add(sound);
-
+		
 		if (autoPlay)
 			sound.play();
-
+		
 		return sound;
 	}
 
@@ -213,8 +213,8 @@ class SoundFrontEnd
 	public inline function cache(embeddedSound:String):Sound
 	{
 		// load the sound into the OpenFL assets cache
-		if (Assets.exists(embeddedSound, AssetType.SOUND) || Assets.exists(embeddedSound, AssetType.MUSIC))
-			return Assets.getSound(embeddedSound, true);
+		if (FlxG.assets.exists(embeddedSound, SOUND))
+			return FlxG.assets.getSoundUnsafe(embeddedSound, true);
 		FlxG.log.error('Could not find a Sound asset with an ID of \'$embeddedSound\'.');
 		return null;
 	}
@@ -225,7 +225,7 @@ class SoundFrontEnd
 	 */
 	public function cacheAll():Void
 	{
-		for (id in Assets.list(AssetType.SOUND))
+		for (id in FlxG.assets.list(SOUND))
 		{
 			cache(id);
 		}
@@ -233,6 +233,8 @@ class SoundFrontEnd
 
 	/**
 	 * Plays a sound from an embedded sound. Tries to recycle a cached sound first.
+	 *
+	 * **Note:** If the `FLX_DEFAULT_SOUND_EXT` flag is enabled, you may omit the file extension
 	 *
 	 * @param   embeddedSound  The embedded sound resource you want to play.
 	 * @param   volume         How loud to play it (0 to 1).

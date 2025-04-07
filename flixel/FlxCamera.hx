@@ -52,7 +52,7 @@ class FlxCamera extends FlxBasic
 	/**
 	 * Used behind-the-scenes during the draw phase so that members use the same default
 	 * cameras as their parent.
-	 *
+	 * 
 	 * This is the non-deprecated list that the public `defaultCameras` proxies. Allows flixel classes
 	 * to use it without warning.
 	 */
@@ -206,7 +206,7 @@ class FlxCamera extends FlxBasic
 	 * WARNING: setting this to `false` on blitting targets is very expensive.
 	 */
 	public var pixelPerfectRender:Bool;
-
+	
 	/**
 	 * If true, screen shake will be rounded to game pixels. If null, pixelPerfectRender is used.
 	 * @since 5.4.0
@@ -609,8 +609,6 @@ class FlxCamera extends FlxBasic
 		// TODO: catch this error when the dev actually messes up, not in the draw phase
 		if (graphic.isDestroyed)
 			throw 'Attempted to queue an invalid FlxDrawItem, did you destroy a cached sprite?';
-
-		if (graphic.isDestroyed) throw 'Attempted to queue an invalid FlxDrawItem, did you destroy a cached sprite?';
 
 		itemToReturn.graphics = graphic;
 		itemToReturn.antialiasing = smooth;
@@ -1151,11 +1149,11 @@ class FlxCamera extends FlxBasic
 		// Make sure we didn't go outside the camera's bounds
 		bindScrollPos(scroll);
 	}
-
+	
 	/**
 	 * Takes the desired scroll position and restricts it to the camera's min/max scroll properties.
 	 * This modifies the given point.
-	 *
+	 * 
 	 * @param   scrollPos  The scroll position
 	 * @return  The same point passed in, moved within the scroll bounds
 	 * @since 5.4.0
@@ -1184,7 +1182,7 @@ class FlxCamera extends FlxBasic
 		if (deadzone == null)
 		{
 			target.getMidpoint(_point);
-			_point.addPoint(targetOffset);
+			_point.add(targetOffset);
 			_scrollTarget.set(_point.x - width * 0.5, _point.y - height * 0.5);
 		}
 		else
@@ -1212,7 +1210,7 @@ class FlxCamera extends FlxBasic
 				{
 					_scrollTarget.y -= viewHeight;
 				}
-
+				
 				// without this we see weird behavior when switching to SCREEN_BY_SCREEN at arbitrary scroll positions
 				bindScrollPos(_scrollTarget);
 			}
@@ -1337,16 +1335,16 @@ class FlxCamera extends FlxBasic
 					var shakePixels = FlxG.random.float(-1, 1) * _fxShakeIntensity * width;
 					if (pixelPerfect)
 						shakePixels = Math.round(shakePixels);
-
+					
 					flashSprite.x += shakePixels * zoom * FlxG.scaleMode.scale.x;
 				}
-
+				
 				if (_fxShakeAxes.y)
 				{
 					var shakePixels = FlxG.random.float(-1, 1) * _fxShakeIntensity * height;
 					if (pixelPerfect)
 						shakePixels = Math.round(shakePixels);
-
+					
 					flashSprite.y += shakePixels * zoom * FlxG.scaleMode.scale.y;
 				}
 			}
@@ -1678,9 +1676,7 @@ class FlxCamera extends FlxBasic
 
 			final targetGraphics = (graphics == null) ? canvas.graphics : graphics;
 
-			#if (openfl > "8.7.0")
 			targetGraphics.overrideBlendMode(null);
-			#end
 			targetGraphics.beginFill(Color, FxAlpha);
 			// i'm drawing rect with these parameters to avoid light lines at the top and left of the camera,
 			// which could appear while cameras fading
@@ -1871,7 +1867,7 @@ class FlxCamera extends FlxBasic
 		updateFlashOffset();
 		setScale(scaleX, scaleY);
 	}
-
+	
 	/**
 	 * The size and position of this camera's margins, via `viewMarginLeft`, `viewMarginTop`, `viewWidth`
 	 * and `viewHeight`.
@@ -1881,10 +1877,10 @@ class FlxCamera extends FlxBasic
 	{
 		if (rect == null)
 			rect = FlxRect.get();
-
+		
 		return rect.set(viewMarginLeft, viewMarginTop, viewWidth, viewHeight);
 	}
-
+	
 	/**
 	 * Checks whether this camera contains a given point or rectangle, in
 	 * screen coordinates.
@@ -1897,7 +1893,7 @@ class FlxCamera extends FlxBasic
 		point.putWeak();
 		return contained;
 	}
-
+	
 	/**
 	 * Checks whether this camera contains a given rectangle, in screen coordinates.
 	 * @since 4.11.0
@@ -2044,72 +2040,72 @@ class FlxCamera extends FlxBasic
 	{
 		viewMarginY = 0.5 * height * (scaleY - initialZoom) / scaleY;
 	}
-
+	
 	static inline function get_defaultCameras():Array<FlxCamera>
 	{
 		return _defaultCameras;
 	}
-
+	
 	static inline function set_defaultCameras(value:Array<FlxCamera>):Array<FlxCamera>
 	{
 		return _defaultCameras = value;
 	}
-
+	
 	inline function get_viewMarginLeft():Float
 	{
 		return viewMarginX;
 	}
-
+	
 	inline function get_viewMarginTop():Float
 	{
 		return viewMarginY;
 	}
-
+	
 	inline function get_viewMarginRight():Float
 	{
 		return width - viewMarginX;
 	}
-
+	
 	inline function get_viewMarginBottom():Float
 	{
 		return height - viewMarginY;
 	}
-
+	
 	inline function get_viewWidth():Float
 	{
 		return width - viewMarginX * 2;
 	}
-
+	
 	inline function get_viewHeight():Float
 	{
 		return height - viewMarginY * 2;
 	}
-
+	
 	inline function get_viewX():Float
 	{
 		return scroll.x + viewMarginX;
 	}
-
+	
 	inline function get_viewY():Float
 	{
 		return scroll.y + viewMarginY;
 	}
-
+	
 	inline function get_viewLeft():Float
 	{
 		return viewX;
 	}
-
+	
 	inline function get_viewTop():Float
 	{
 		return viewY;
 	}
-
+	
 	inline function get_viewRight():Float
 	{
 		return scroll.x + viewMarginRight;
 	}
-
+	
 	inline function get_viewBottom():Float
 	{
 		return scroll.y + viewMarginBottom;
@@ -2122,19 +2118,19 @@ class FlxCamera extends FlxBasic
 	@:deprecated("don't reference camera.camera")
 	@:noCompletion
 	override function get_camera():FlxCamera throw "don't reference camera.camera";
-
+	
 	@:deprecated("don't reference camera.camera")
 	@:noCompletion
 	override function set_camera(value:FlxCamera):FlxCamera throw "don't reference camera.camera";
-
+	
 	@:deprecated("don't reference camera.cameras")
 	@:noCompletion
 	override function get_cameras():Array<FlxCamera> throw "don't reference camera.cameras";
-
+	
 	@:deprecated("don't reference camera.cameras")
 	@:noCompletion
 	override function set_cameras(value:Array<FlxCamera>):Array<FlxCamera> throw "don't reference camera.cameras";
-
+	
 }
 
 enum FlxCameraFollowStyle
