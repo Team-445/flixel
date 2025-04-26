@@ -118,11 +118,13 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		// TODO: catch this error when the dev actually messes up, not in the draw phase
 		if (shader == null && graphics.isDestroyed)
 			throw 'Attempted to render an invalid FlxDrawItem, did you destroy a cached sprite?';
-		
+
 		final shader = shader != null ? shader : graphics.shader;
 		shader.bitmap.input = graphics.bitmap;
 		shader.bitmap.filter = (camera.antialiasing || antialiasing) ? LINEAR : NEAREST;
 		shader.alpha.value = alphas;
+		final isTexture:Bool = !graphics.bitmap.readable;
+		shader.isTexture.value = [isTexture];
 
 		if (colored || hasColorOffsets)
 		{
