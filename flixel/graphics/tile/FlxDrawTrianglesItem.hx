@@ -20,6 +20,7 @@ typedef DrawData<T> = openfl.Vector<T>;
  */
 #if !flash
 @:access(openfl.display.BitmapData)
+@:access(openfl.display3D.textures.TextureBase)
 #end
 class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 {
@@ -78,8 +79,7 @@ class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 
 		setParameterValue(shader.hasTransform, true);
 		setParameterValue(shader.hasColorTransform, colored || hasColorOffsets);
-		setParameterValue(shader.premultiplyAlpha, !shader.bitmap.input.readable && shader.bitmap.input.__texture != null && Std.isOfType(shader.bitmap.input.__texture,
-			openfl.display3D.textures.ASTCTexture));
+		setParameterValue(shader.premultiplyAlpha, !shader.bitmap.input.readable && shader.bitmap.input.__texture != null && shader.bitmap.input.__texture.__premultiplyAlpha);
 
 		camera.canvas.graphics.overrideBlendMode(blend);
 
