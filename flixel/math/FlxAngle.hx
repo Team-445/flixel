@@ -351,7 +351,7 @@ class FlxAngle
 		return angleBetweenTouch(Object, Touch, false);
 	}
 	#end
-
+	
 	static inline function get_TO_DEG():Float
 	{
 		return 180 / Math.PI;
