@@ -18,6 +18,10 @@ typedef DrawData<T> = openfl.Vector<T>;
 /**
  * @author Zaphod
  */
+#if !flash
+@:access(openfl.display.BitmapData)
+@:access(openfl.display3D.textures.TextureBase)
+#end
 class FlxDrawTrianglesItem extends FlxDrawBaseItem<FlxDrawTrianglesItem>
 {
 	static var point:FlxPoint = FlxPoint.get();
