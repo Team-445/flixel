@@ -52,6 +52,7 @@ import flixel.input.FlxGyroscope;
 #if FLX_POINTER_INPUT
 import flixel.input.FlxSwipe;
 #end
+
 #if html5
 import flixel.system.frontEnds.HTML5FrontEnd;
 #end
@@ -102,7 +103,7 @@ class FlxG
 	 * The HaxeFlixel version, in semantic versioning syntax. Use `Std.string()`
 	 * on it to get a `String` formatted like this: `"HaxeFlixel MAJOR.MINOR.PATCH-COMMIT_SHA"`.
 	 */
-	public static var VERSION(default, null):FlxVersion = new FlxVersion(5, 9, 0);
+	public static final VERSION = new FlxVersion(6, 1, 1);
 
 	/**
 	 * Internal tracker for game object.
