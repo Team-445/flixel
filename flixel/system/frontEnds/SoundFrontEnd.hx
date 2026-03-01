@@ -333,7 +333,7 @@ class SoundFrontEnd
 	{
 		if (music != null && music.exists)
 		{
-			if (music._pausedPlay = music.playing) music.source.pause();
+			if (music._pausedPlay = music.source.playing) music.source.pause();
 			music._pausedByHandler = true;
 		}
 
@@ -341,7 +341,7 @@ class SoundFrontEnd
 		{
 			if (sound != null && sound.exists)
 			{
-				if (sound._pausedPlay = sound.playing) sound.source.pause();
+				if (sound._pausedPlay = sound.source.playing) sound.source.pause();
 				sound._pausedByHandler = true;
 			}
 		}
@@ -356,8 +356,8 @@ class SoundFrontEnd
 	{
 		if (music != null && music.exists && music._pausedByHandler)
 		{
-			if (music._pausedPlay) music.source.play();
 			music._pausedByHandler = false;
+			if (music._pausedPlay) music.source.play();
 			music._pausedPlay = false;
 		}
 
@@ -365,8 +365,8 @@ class SoundFrontEnd
 		{
 			if (sound != null && sound.exists && sound._pausedByHandler)
 			{
-				if (sound._pausedPlay) sound.source.play();
 				sound._pausedByHandler = false;
+				if (sound._pausedPlay) sound.source.play();
 				sound._pausedPlay = false;
 			}
 		}
