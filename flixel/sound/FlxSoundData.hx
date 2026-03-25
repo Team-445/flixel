@@ -413,7 +413,7 @@ class FlxSoundData implements IFlxDestroyable
 		#if (js && html5 && howlerjs)
 		return (_buffer != null && _buffer.__srcHowl != null) ? Int64.fromFloat(_buffer.__srcHowl.duration() * get_sampleRate()) : 0;
 		#else
-		return _samples;
+		return _buffer != null ? _samples : 0;
 		#end
 	}
 
@@ -422,7 +422,7 @@ class FlxSoundData implements IFlxDestroyable
 		#if (js && html5 && howlerjs)
 		return (_buffer?.__srcHowl?.duration() ?? 0) * 1000.0;
 		#else
-		return (_samples.high * 4294967296.0 + (_samples.low >>> 0)) / _buffer.sampleRate * 1000.0;
+		return _buffer != null ? (_samples.high * 4294967296.0 + (_samples.low >>> 0)) / _buffer.sampleRate * 1000.0 : 0;
 		#end
 	}
 
