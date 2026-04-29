@@ -70,5 +70,6 @@ class FlxGraphicsShader extends GraphicsShader
 	public function new()
 	{
 		super();
+		premultiplyAlpha.value = [false];
 	}
 }

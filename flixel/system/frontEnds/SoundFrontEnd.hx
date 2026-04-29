@@ -179,7 +179,7 @@ class SoundFrontEnd
 			music.stop();
 		}
 		
-		music.loadEmbedded(embeddedMusic, looped);
+		music.load(embeddedMusic, looped);
 		music.volume = volume;
 		music.persist = true;
 		group.add(music);
@@ -216,7 +216,7 @@ class SoundFrontEnd
 
 		if (embeddedSound != null)
 		{
-			sound.loadEmbedded(embeddedSound, looped, autoDestroy, onComplete);
+			sound.load(embeddedSound, looped, autoDestroy, onComplete);
 			loadHelper(sound, volume, group, autoPlay);
 			// Call OnlLoad() because the sound already loaded
 			if (onLoad != null && sound.data != null)
@@ -275,7 +275,7 @@ class SoundFrontEnd
 	}
 
 	/**
-	 * Calls FlxG.sound.cache() on all sounds that are embedded.
+	 * Calls FlxSoundAsset.fromAsset() on all sounds that are embedded.
 	 * WARNING: can lead to high memory usage.
 	 */
 	public function cacheAll():Void
@@ -302,7 +302,7 @@ class SoundFrontEnd
 	 */
 	public function play(embeddedSound:FlxSoundAsset, volume = 1.0, looped = false, ?group:FlxSoundGroup, autoDestroy = true, ?onComplete:Void->Void):FlxSound
 	{
-		var sound = list.recycle(FlxSound).loadEmbedded(embeddedSound, looped, autoDestroy, onComplete);
+		var sound = list.recycle(FlxSound).load(embeddedSound, looped, autoDestroy, onComplete);
 		return loadHelper(sound, volume, group, true);
 	}
 

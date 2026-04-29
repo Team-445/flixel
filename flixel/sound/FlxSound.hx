@@ -587,9 +587,7 @@ class FlxSound extends FlxBasic
 	 * 
 	 * @since 6.2.0
 	 */
-	//public function load
-	// funkin.audio.FunkinSound already defined load as a static function.
-	public function loadEmbedded(asset:FlxSoundAsset, ?looped:Bool, ?loopTime:Float, ?endTime:Float, autoDestroy = false, ?onComplete:Void->Void):FlxSound
+	public function load(asset:FlxSoundAsset, ?looped:Bool, ?loopTime:Float, ?endTime:Float, autoDestroy = false, ?onComplete:Void->Void):FlxSound
 	{
 		return init(asset == null ? null : FlxSoundData.fromAsset(asset), looped, loopTime, endTime, autoDestroy, onComplete);
 	}
@@ -682,11 +680,11 @@ class FlxSound extends FlxBasic
 	 * @param	OnComplete		Called when the sound finished playing
 	 * @return	This FlxSound instance (nice for chaining stuff together, if you're into that).
 	 */
-	//@:deprecated("loadEmbedded() is deprecated, use load() instead.")
-	//public function loadEmbedded(EmbeddedSound:FlxSoundAsset, Looped:Bool = false, AutoDestroy:Bool = false, ?OnComplete:Void->Void):FlxSound
-	//{
-	//	return load(EmbeddedSound, Looped, AutoDestroy, OnComplete);
-	//}
+	@:deprecated("loadEmbedded() is deprecated, use load() instead.")
+	public function loadEmbedded(EmbeddedSound:FlxSoundAsset, Looped:Bool = false, AutoDestroy:Bool = false, ?OnComplete:Void->Void):FlxSound
+	{
+		return load(EmbeddedSound, Looped, AutoDestroy, OnComplete);
+	}
 
 	/**
 	 * One of the main setup functions for sounds, this function loads a sound from a URL.
@@ -717,7 +715,7 @@ class FlxSound extends FlxBasic
 	@:deprecated("loadByteArray() is deprecated, use load() instead.")
 	public function loadByteArray(Bytes:ByteArray, Looped:Bool = false, AutoDestroy:Bool = false, ?OnComplete:Void->Void):FlxSound
 	{
-		return loadEmbedded(Bytes, Looped, AutoDestroy, OnComplete);
+		return load(Bytes, Looped, AutoDestroy, OnComplete);
 	}
 
 	function init(data:FlxSoundData, ?looped:Bool, ?loopTime:Float, ?endTime:Float, autoDestroy = false, ?onComplete:Void->Void):FlxSound
