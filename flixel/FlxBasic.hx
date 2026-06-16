@@ -3,6 +3,7 @@ package flixel;
 import flixel.group.FlxContainer;
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxStringUtil;
+import flixel.group.IFlxGroupable;
 
 /**
  * This is a useful "generic" Flixel object. Both `FlxObject` and
@@ -75,7 +76,7 @@ class FlxBasic implements IFlxDestroyable
 	 * The parent containing this basic, typically if you check this recursively you should reach the state
 	 * @since 5.7.0
 	 */
-	public var container(get, null):Null<FlxContainer>;
+	public var container(get, null):Null<IFlxGroupable<FlxBasic>>;
 
 	/**
 	 * The zIndex of this object, used for layering.
