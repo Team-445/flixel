@@ -13,6 +13,7 @@ import flixel.graphics.frames.FlxFrame;
 import flixel.graphics.tile.FlxDrawBaseItem;
 import flixel.graphics.tile.FlxDrawQuadsItem;
 import flixel.graphics.tile.FlxDrawTrianglesItem;
+import flixel.graphics.tile.FlxDrawMeshItem;
 import flixel.math.FlxMath;
 import flixel.math.FlxMatrix;
 import flixel.math.FlxPoint;
@@ -568,6 +569,11 @@ class FlxCamera extends FlxBasic
 	var _headTriangles:FlxDrawTrianglesItem;
 
 	/**
+	 * Last draw mesh item
+	 */
+	var _headMesh:FlxDrawMeshItem;
+
+	/**
 	 * Draw tiles stack items that can be reused
 	 */
 	static var _storageTilesHead:FlxDrawQuadsItem;
@@ -576,6 +582,11 @@ class FlxCamera extends FlxBasic
 	 * Draw triangles stack items that can be reused
 	 */
 	static var _storageTrianglesHead:FlxDrawTrianglesItem;
+
+	/**
+	 * Draw mesh stack items that can be reused
+	 */
+	static var _storageMeshHead:FlxDrawMeshItem;
 
 	/**
 	 * Internal variable, used for visibility checks to minimize `drawTriangles()` calls.
@@ -718,6 +729,60 @@ class FlxCamera extends FlxBasic
 		return itemToReturn;
 	}
 
+	@:noCompletion
+	public function startMeshBatch(?blend:BlendMode, color:Int = 0xFFFFFF, alpha:Float = 1):FlxDrawMeshItem
+	{
+		if (_currentDrawItem != null
+			&& _currentDrawItem.type == FlxDrawItemType.MESH
+			&& _headMesh.blend == blend
+			&& _headMesh.color == color
+			&& _headMesh.alpha == alpha)
+		{
+			return _headMesh;
+		}
+
+		return getNewDrawMeshItem(blend, color, alpha);
+	}
+
+	@:noCompletion
+	public function getNewDrawMeshItem(?blend:BlendMode, color:Int = 0xFFFFFF, alpha:Float = 1):FlxDrawMeshItem
+	{
+		var itemToReturn:FlxDrawMeshItem;
+
+		if (_storageMeshHead != null)
+		{
+			itemToReturn = _storageMeshHead;
+			var newHead:FlxDrawMeshItem = _storageMeshHead.nextTyped;
+			itemToReturn.reset();
+			_storageMeshHead = newHead;
+		}
+		else
+		{
+			itemToReturn = new FlxDrawMeshItem();
+		}
+
+		itemToReturn.blend = blend;
+		itemToReturn.color = color;
+		itemToReturn.alpha = alpha;
+
+		itemToReturn.nextTyped = _headMesh;
+		_headMesh = itemToReturn;
+
+		if (_headOfDrawStack == null)
+		{
+			_headOfDrawStack = itemToReturn;
+		}
+
+		if (_currentDrawItem != null)
+		{
+			_currentDrawItem.next = itemToReturn;
+		}
+
+		_currentDrawItem = itemToReturn;
+
+		return itemToReturn;
+	}
+
 	@:allow(flixel.system.frontEnds.CameraFrontEnd)
 	function clearDrawStack():Void
 	{
@@ -745,10 +810,23 @@ class FlxCamera extends FlxBasic
 			currTriangles = newTrianglesHead;
 		}
 
+		var currMesh:FlxDrawMeshItem = _headMesh;
+		var newMeshHead:FlxDrawMeshItem;
+
+		while (currMesh != null)
+		{
+			newMeshHead = currMesh.nextTyped;
+			currMesh.reset();
+			currMesh.nextTyped = _storageMeshHead;
+			_storageMeshHead = currMesh;
+			currMesh = newMeshHead;
+		}
+
 		_currentDrawItem = null;
 		_headOfDrawStack = null;
 		_headTiles = null;
 		_headTriangles = null;
+		_headMesh = null;
 	}
 
 	@:allow(flixel.system.frontEnds.CameraFrontEnd)
@@ -930,6 +1008,12 @@ class FlxCamera extends FlxBasic
 			final drawItem = startTrianglesBatch(graphic, smoothing, isColored, blend, hasColorOffsets, shader);
 			drawItem.addTriangles(vertices, indices, uvtData, colors, position, _bounds, transform);
 		}
+	}
+
+	public function drawMesh(vertices:DrawData<Float>, indices:DrawData<Int>, uvtData:DrawData<Float>, ?matrix:FlxMatrix, ?blend:BlendMode, ?color:Int, ?alpha:Float):Void
+	{
+		final drawItem = startMeshBatch(blend, color, alpha);
+		drawItem.addMesh(vertices, indices, uvtData, matrix);
 	}
 
 	/**
