@@ -463,7 +463,7 @@ private class FlxSharedObject extends SharedObject
 	
 	public static inline function exists(name:String, ?path:String)
 	{
-		return true;
+		return sys.FileSystem.exists(SharedObject.__getPath(path, name));
 	}
 	#else
 	static var all:Map<String, FlxSharedObject>;
