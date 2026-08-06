@@ -183,9 +183,9 @@ class FlxKeyManager<Key:Int, KeyList:FlxBaseKeyList> implements IFlxInputManager
 			return checkStatusUnsafe(KeyCode, Status);
 		}
 		
-		#if debug
-		throw 'Invalid key code: $KeyCode.';
-		#end
+		//#if debug
+		//throw 'Invalid key code: $KeyCode.';
+		//#end
 		return false;
 	}
 
