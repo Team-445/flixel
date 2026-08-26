@@ -93,7 +93,7 @@ class FlxPointer
 		if (result == null)
 			return FlxPoint.get();
 		
-		return result.set(Std.int(_rawX), Std.int(_rawY));
+		return result.set(_rawX, _rawY);
 	}
 	
 	/**
@@ -114,8 +114,8 @@ class FlxPointer
 		if (result == null)
 			result = FlxPoint.get();
 		
-		result.x = Std.int((gameX - camera.x) / camera.zoom + camera.viewMarginX);
-		result.y = Std.int((gameY - camera.y) / camera.zoom + camera.viewMarginY);
+		result.x = (gameX - camera.x) / camera.zoom + camera.viewMarginX;
+		result.y = (gameY - camera.y) / camera.zoom + camera.viewMarginY;
 		
 		return result;
 	}
