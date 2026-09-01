@@ -13,6 +13,10 @@ import openfl.geom.ColorTransform;
 @:access(openfl.display.BitmapData)
 @:access(openfl.display3D.textures.TextureBase)
 #end
+#if !flash
+@:access(openfl.display.BitmapData)
+@:access(openfl.display3D.textures.TextureBase)
+#end
 class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 {
 	static inline var VERTICES_PER_QUAD = 4;
@@ -119,9 +123,11 @@ class FlxDrawQuadsItem extends FlxDrawBaseItem<FlxDrawQuadsItem>
 		if (rects.length == 0)
 			return;
 
+
 		// TODO: catch this error when the dev actually messes up, not in the draw phase
 		if (shader == null && graphics.isDestroyed)
 			throw 'Attempted to render an invalid FlxDrawItem, did you destroy a cached sprite?';
+
 
 		final shader = shader != null ? shader : graphics.shader;
 		shader.bitmap.input = graphics.bitmap;

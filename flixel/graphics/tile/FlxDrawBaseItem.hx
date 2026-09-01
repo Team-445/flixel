@@ -83,4 +83,5 @@ enum FlxDrawItemType
 {
 	TILES;
 	TRIANGLES;
+	MESH;
 }
