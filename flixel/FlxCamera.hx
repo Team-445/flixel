@@ -1864,7 +1864,8 @@ class FlxCamera extends FlxBasic
 			targetGraphics.beginFill(Color, FxAlpha);
 			// i'm drawing rect with these parameters to avoid light lines at the top and left of the camera,
 			// which could appear while cameras fading
-			targetGraphics.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			_bounds.copyFrom(__get__bounds());
+			targetGraphics.drawRect(_bounds.x, _bounds.y, _bounds.width, _bounds.height);
 			targetGraphics.endFill();
 		}
 	}

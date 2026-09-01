@@ -555,6 +555,7 @@ class FlxG
 		initRenderMethod();
 		#if FLX_OPENGL_AVAILABLE
 		// Query once when window is created and cache for later
+		@:privateAccess
 		bitmap.get_maxTextureSize();
 		#end
 
