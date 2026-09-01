@@ -1406,7 +1406,7 @@ class FlxSound extends FlxBasic
 	{
 		#if FLX_SOUND_SYSTEM
 		if (FlxG.sound._muted) return 0;
-		return FlxG.sound.applySoundCurve(getActualVolume() * FlxG.sound._volume);
+		return getActualVolume() * FlxG.sound._volume;
 		#else
 		return getActualVolume();
 		#end

@@ -374,7 +374,7 @@ class FlxBitmapText extends FlxSprite
 					continue;
 				}
 
-				getScreenPosition(screenPos, camera).subtractPoint(offset);
+				getScreenPosition(screenPos, camera).subtract(offset);
 
 				if (isPixelPerfectRender(camera))
 				{
@@ -1702,9 +1702,9 @@ class FlxBitmapText extends FlxSprite
 		for (i in 0...text.length) {
 			var c = text.charCodeAt(i);
 
-			// Always preserve spaces
-			if (c >= 9 && c <= 13 || c == 32) {
-				buf.addChar(c);
+			// Always preserve literal spaces (even if not in charMap)
+			if (c == " ".code) {
+				buf.add(" ");
 				continue;
 			}
 

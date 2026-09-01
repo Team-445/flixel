@@ -63,6 +63,7 @@ class SoundFrontEnd
 	 */
 	public var paused(default, null):Bool = false;
 
+
 	/**
 	 * Set this hook to get a callback whenever the volume changes.
 	 * Function should take the form myVolumeHandler(volume:Float).
@@ -572,33 +573,27 @@ class SoundFrontEnd
 	{
 		volume = linearToLog(logToLinear(_volume) + value);
 		muted = false;
-		showSoundTray(value > 0);
+		showSoundTray(volume > 0);
 	}
 
 	public function linearToLog(x:Float, minValue:Float = 0.001):Float
 	{
-		// If linear volume is 0, return 0
-		if (x <= 0) return 0;
-
 		// Ensure x is between 0 and 1
-		x = Math.min(1, x);
-
+		x = Math.max(0, Math.min(1, x));
+		
 		// Convert linear scale to logarithmic
 		return Math.exp(Math.log(minValue) * (1 - x));
 	}
-
+	
 	public function logToLinear(x:Float, minValue:Float = 0.001):Float
 	{
-		// If logarithmic volume is below than minValue, return 0
-		if (x <= minValue) return 0;
-
 		// Ensure x is between minValue and 1
-		x = Math.min(1, x);
-
+		x = Math.max(minValue, Math.min(1, x));
+		
 		// Convert logarithmic scale to linear
-		return 1 - (Math.log(Math.max(x, minValue)) / Math.log(minValue));
+		return 1 - (Math.log(x) / Math.log(minValue));
 	}
-
+	
 	/**
 	 * Shows the sound tray if it is enabled.
 	 * @param up Whether or not the volume is increasing.
@@ -614,34 +609,6 @@ class SoundFrontEnd
 				FlxG.game.soundTray.showDecrement();
 		}
 		#end
-	}
-	
-	/**
-	 * Takes the volume scale used by Flixel fields and gives the final transformed volume that is
-	 * actually used to play the sound. To reverse this operation, use `reverseSoundCurve`. This
-	 * field is `dynamic` and can be overwritten. 
-	 */
-	public dynamic function applySoundCurve(volume:Float)
-	{
-		return volume;
-		
-		// Example of linear to logarithmic sound curve:
-		// final clampedVolume = Math.max(0, Math.min(1, volume));
-		// return Math.exp(Math.log(0.001) * (1 - clampedVolume));
-	}
-	
-	/**
-	 * Takes a transformed volume and returns the corresponding volume scale used by Flixel fields.
-	 * Used to reverse the operation of `applySoundCurve`. This field is `dynamic` and can be
-	 * set to a custom function.
-	 */
-	public dynamic function reverseSoundCurve(curvedVolume:Float)
-	{
-		return curvedVolume;
-		
-		// Example of logarithmic to linear sound curve:
-		// final clampedVolume = Math.max(minValue, Math.min(1, x));
-		// return 1 - (Math.log(clampedVolume) / Math.log(0.001));
 	}
 	
 	function new()
@@ -794,6 +761,7 @@ class SoundFrontEnd
 
 	function set_volume(value:Float):Float
 	{
+		#if mobile value = 1; #end
 		var prevVolume = _volume;
 		_volume = FlxMath.bound(value, 0, 1);
 
@@ -839,7 +807,7 @@ class SoundFrontEnd
 	{
 		// https://github.com/FunkinCrew/flixel/pull/12
 		#if mobile
-		return _muted = value;
+		return _muted = false;
 		#else
 		if (_muted != value)
 		{

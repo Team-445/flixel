@@ -29,6 +29,7 @@ import openfl.net.SharedObjectFlushStatus;
  * ## Default Paths
  * - Windows: ```"C:\Users\<username>\AppData\Roaming\<localPath>\<name>.sol"```
  * - Mac: ```"/Users/<username>/Library/Application Support/<localPath>/<name>.sol"```
+ * - Linux: ```"/home/<username>/.local/share/<localPath>/<name>.sol"```
  * - Chrome: In the developer tools, go to the Application tab, and under
  *     `Storage->Local Storage->https://<url>.com` with the key:`<localPath>:<name>"`
  * 
@@ -99,19 +100,6 @@ class FlxSave implements IFlxDestroyable
 	}
 	
 	/**
-	 * The default class resolver of a FlxSave, handles certain Flixel and Openfl classes
-	 */
-	public static inline function resolveFlixelClasses(name:String)
-	{
-		#if flash
-		return Type.resolveClass(name);
-		#else
-		@:privateAccess
-		return SharedObject.__resolveClass(name);
-		#end
-	}
-	
-	/**
 	 * Allows you to directly access the data container in the local shared object.
 	 */
 	public var data(default, null):Dynamic;
@@ -154,6 +142,23 @@ class FlxSave implements IFlxDestroyable
 		_sharedObject = null;
 		status = EMPTY;
 		data = null;
+	}
+
+	/**
+	 * Returns `true` if a save file exists at the given location.
+	 * Note this does not parse the save file or check its validity.
+	 *
+	 * @param   name          The name of the save (should be the same each time to access old data).
+	 *                        May not contain spaces or any of the following characters:
+	 *                        `~ % & \ ; : " ' , < > ? #`
+	 * @param   path          The full or partial path to the file that created the shared object.
+	 *                        Mainly used to differentiate from other FlxSaves. If you do not specify
+	 *                        this parameter, the company name specified in your Project.xml is used.
+	 * @return  Whether a file exists at the location.
+	 */
+	public static function exists(name, ?path:String):Bool
+	{
+		return FlxSharedObject.exists(name, path);
 	}
 
 	/**
@@ -429,7 +434,7 @@ private class FlxSharedObject extends SharedObject
 {
 	#if (flash || android || ios)
 	/** Use SharedObject as usual */
-	public static inline function getLocal(name:String, ?localPath:String):LoadResult
+	public static function getLocal(name:String, ?localPath:String):LoadResult
 	{
 		try
 		{
@@ -443,9 +448,9 @@ private class FlxSharedObject extends SharedObject
 		}
 	}
 	
-	public static inline function exists(name:String, ?path:String)
+	public static function exists(name:String, ?path:String)
 	{
-		return true;
+		return sys.FileSystem.exists(SharedObject.__getPath(path, name));
 	}
 	#else
 	static var all:Map<String, FlxSharedObject>;
@@ -523,10 +528,7 @@ private class FlxSharedObject extends SharedObject
 			{
 				try
 				{
-					final unserializer = new haxe.Unserializer(encodedData);
-					final resolver = { resolveEnum: Type.resolveEnum, resolveClass: FlxSave.resolveFlixelClasses };
-					unserializer.setResolver(cast resolver);
-					sharedObject.data = unserializer.unserialize();
+					sharedObject.data = new haxe.Unserializer(encodedData).unserialize();
 				}
 				catch (e)
 				{
@@ -650,7 +652,7 @@ private class FlxSharedObject extends SharedObject
 	 */
 	public static inline function exists(name:String, ?localPath:String)
 	{
-		return newExists(localPath, name)
+		return newExists(name, localPath)
 			|| legacyExists(localPath, name);
 	}
 	

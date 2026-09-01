@@ -83,7 +83,6 @@ class FlxTouchManager implements IFlxInputManager
 		_touchesCache.clear();
 		FlxDestroyUtil.destroyArray(list);
 		FlxDestroyUtil.destroyArray(_inactiveTouches);
-
 		#if FLX_POINTER_INPUT
 		flickManager.destroy();
 		#end
@@ -268,6 +267,7 @@ class FlxTouchManager implements IFlxInputManager
 		#end
 
 		var i:Int = list.length - 1;
+
 
 		while (i >= 0)
 		{
