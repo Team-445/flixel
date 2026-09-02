@@ -1,8 +1,6 @@
 package flixel.system.debug.watch;
 
-#if polymod
-import polymod.hscript._internal.Expr;
-#elseif hscript
+#if hscript
 import hscript.Expr;
 #end
 
@@ -21,7 +19,7 @@ enum WatchEntryData
 	/**
 	 * Haxe expression evaluated with hscript.
 	 */
-	EXPRESSION(expression:String, parsedExpr:#if (polymod || hscript) Expr #else String #end);
+	EXPRESSION(expression:String, parsedExpr:#if hscript Expr #else String #end);
 	
 	/**
 	 * A function that returns the value to display.

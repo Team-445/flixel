@@ -1,7 +1,7 @@
 package flixel.system.frontEnds;
 
 import flixel.FlxG;
-#if (polymod || hscript)
+#if hscript
 import flixel.system.debug.console.ConsoleUtil;
 #end
 
@@ -84,7 +84,7 @@ class WatchFrontEnd
 	{
 		#if FLX_DEBUG
 		var parsedExpr = null;
-		#if (polymod || hscript)
+		#if hscript
 		parsedExpr = ConsoleUtil.parseCommand(expression);
 		#end
 		window.add(displayName == null ? expression : displayName, EXPRESSION(expression, parsedExpr));

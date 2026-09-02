@@ -7,14 +7,9 @@ using flixel.util.FlxStringUtil;
 using flixel.util.FlxArrayUtil;
 using StringTools;
 
-#if polymod
-import polymod.hscript._internal.Expr;
-import polymod.hscript._internal.Parser;
-import polymod.hscript._internal.Interp as HScriptInterp;
-#elseif hscript
+#if hscript
 import hscript.Expr;
 import hscript.Parser;
-import hscript.Interp as HScriptInterp;
 #end
 
 /** 
@@ -22,7 +17,7 @@ import hscript.Interp as HScriptInterp;
  */
 class ConsoleUtil
 {
-	#if (polymod || hscript)
+	#if hscript
 	/**
 	 * The hscript parser to make strings into haxe code.
 	 */
@@ -42,11 +37,7 @@ class ConsoleUtil
 		parser.allowJSON = true;
 		parser.allowTypes = true;
 
-		#if (polymod)
-		interp = new Interp(null, null);
-		#else
 		interp = new Interp();
-		#end
 	}
 
 	/**
@@ -181,8 +172,11 @@ class ConsoleUtil
 	}
 }
 
-#if (polymod || hscript)
-private class Interp extends HScriptInterp
+/**
+ * hscript doesn't use property access by default... have to make our own.
+ */
+#if hscript
+private class Interp extends hscript.Interp
 {
 	public function getGlobals():Array<String>
 	{
@@ -197,7 +191,6 @@ private class Interp extends HScriptInterp
 		return array;
 	}
 
-	#if (hscript && !polymod)
 	override function get(o:Dynamic, f:String):Dynamic
 	{
 		if (o == null)
@@ -212,6 +205,5 @@ private class Interp extends HScriptInterp
 		Reflect.setProperty(o, f, v);
 		return v;
 	}
-	#end
 }
 #end

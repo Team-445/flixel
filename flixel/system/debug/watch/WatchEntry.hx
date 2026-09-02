@@ -13,7 +13,7 @@ import openfl.text.TextFormat;
 
 using flixel.util.FlxStringUtil;
 
-#if (polymod || hscript)
+#if hscript
 import flixel.system.debug.console.ConsoleUtil;
 #end
 
@@ -120,7 +120,7 @@ class WatchEntry extends Sprite implements IFlxDestroyable
 			case FIELD(object, field):
 				Reflect.getProperty(object, field);
 			case EXPRESSION(_, parsedExpr):
-				#if (polymod || hscript)
+				#if hscript
 				ConsoleUtil.runExpr(parsedExpr);
 				#else
 				"hscript is not installed";
