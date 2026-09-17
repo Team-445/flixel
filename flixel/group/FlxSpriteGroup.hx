@@ -283,7 +283,7 @@ class FlxTypedSpriteGroup<T:FlxSprite> extends FlxSprite implements IFlxGroupabl
 		preAdd(Sprite);
 		group.add(Sprite);
 
-		Sprite.container = cast this;
+		//Sprite.container = cast this;
 
 		return Sprite;
 	}
